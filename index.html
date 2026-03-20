@@ -301,16 +301,15 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 const EJS_KEY="BMMGXE8I6OtVeMROI",EJS_SVC="service_wtgin0l",EJS_TPL="template_tb01514",P_EMAIL="vafgeo@gmail.com";
 emailjs.init(EJS_KEY);
 
-/* ══ GRAMMAR & PUNCTUATION BANK ══
-   type: 'mcq' | 'tick' | 'input' | 'rewrite'
-   For tick: answers = array of correct option indices (can be multiple)
-   For mcq:  answers = [correct index]
-   For input: answers = array of accepted strings (lowercase compared)
-   For rewrite: teacher-marked, always scores 1 if anything written (flagged for parent review)
+/* ══ GRAMMAR & PUNCTUATION BANK — 80 questions ══
+   type: 'mcq' | 'tick' | 'input'
+   tick answers = array of correct indices (can be multiple)
+   mcq  answers = [correct index]
+   input answers = array of accepted strings (lowercased on compare)
 */
 const GRAMMAR_BANK=[
 
-  /* ── WORD CLASSES ── */
+  /* ══ WORD CLASSES (20 questions) ══ */
   {id:'g1',type:'mcq',section:'Word classes',
    question:"Which word is a <strong>pronoun</strong>?",
    opts:["quickly","them","beautiful","running"],answers:[1]},
@@ -338,116 +337,342 @@ const GRAMMAR_BANK=[
    opts:["The boy ran quickly down the street.","The girl, who had red hair, won the race.","They arrived early and found a seat.","She smiled because she was happy."],
    answers:[1]},
 
-  /* ── SENTENCE GRAMMAR ── */
-  {id:'g7',type:'mcq',section:'Sentence grammar',
+  {id:'g7',type:'mcq',section:'Word classes',
+   question:"Which word is a <strong>determiner</strong>?",
+   opts:["run","the","quickly","blue"],answers:[1]},
+
+  {id:'g8',type:'mcq',section:'Word classes',
+   question:"In the sentence \"<em>She sang beautifully</em>\", what word class is <strong>beautifully</strong>?",
+   opts:["Adjective","Noun","Adverb","Verb"],answers:[2]},
+
+  {id:'g9',type:'mcq',section:'Word classes',
+   question:"Which word is a <strong>conjunction</strong>?",
+   opts:["however","therefore","although","consequently"],answers:[2]},
+
+  {id:'g10',type:'tick',section:'Word classes',
+   question:"Tick <strong>two</strong> words that are <strong>adjectives</strong>.",
+   opts:["frantically","enormous","wonder","glittering"],
+   answers:[1,3]},
+
+  {id:'g11',type:'mcq',section:'Word classes',
+   question:"Which sentence contains a <strong>possessive pronoun</strong>?",
+   opts:["She gave it to him.","The blue bag is mine.","They ran quickly away.","He smiled at her."],answers:[1]},
+
+  {id:'g12',type:'mcq',section:'Word classes',
+   question:"What word class is <strong>beneath</strong> in this sentence?\n\n\"The cat slept beneath the warm radiator.\"",
+   opts:["Adverb","Adjective","Preposition","Conjunction"],answers:[2]},
+
+  {id:'g13',type:'tick',section:'Word classes',
+   question:"Tick the sentence that contains a <strong>proper noun</strong>.",
+   opts:["The city was very busy.","London is the capital of England.","She walked to the market.","The dog barked loudly."],
+   answers:[1]},
+
+  {id:'g14',type:'mcq',section:'Word classes',
+   question:"Which word is a <strong>modal verb</strong>?",
+   opts:["running","should","quickly","happy"],answers:[1]},
+
+  {id:'g15',type:'mcq',section:'Word classes',
+   question:"Which sentence uses a <strong>relative pronoun</strong>?",
+   opts:["She ran because she was late.","The book that I borrowed was excellent.","He smiled and waved goodbye.","They arrived before the rain started."],answers:[1]},
+
+  {id:'g16',type:'input',section:'Word classes',
+   question:"What word class is the word <strong>rapidly</strong> in the sentence below?\n\n\"The cheetah ran rapidly across the plain.\"",
+   instruction:"Write one word.",
+   answers:["adverb"],
+   displayAnswer:"adverb"},
+
+  {id:'g17',type:'mcq',section:'Word classes',
+   question:"Which word is an <strong>abstract noun</strong>?",
+   opts:["elephant","courage","quickly","golden"],answers:[1]},
+
+  {id:'g18',type:'tick',section:'Word classes',
+   question:"Tick <strong>two</strong> sentences that contain a <strong>preposition</strong>.",
+   opts:["She ran quickly to school.","The cat sat beside the fire.","He laughed at her joke.","They danced all evening."],
+   answers:[1,2]},
+
+  {id:'g19',type:'mcq',section:'Word classes',
+   question:"In the sentence \"<em>This is my favourite book</em>\", what word class is <strong>This</strong>?",
+   opts:["Pronoun","Determiner","Adjective","Conjunction"],answers:[1]},
+
+  {id:'g20',type:'mcq',section:'Word classes',
+   question:"Which sentence contains a <strong>verb in the imperative</strong> form?",
+   opts:["She opened the window.","Could you open the window?","Open the window immediately.","The window was opened."],answers:[2]},
+
+  /* ══ SENTENCE GRAMMAR (22 questions) ══ */
+  {id:'g21',type:'mcq',section:'Sentence grammar',
    question:"Which sentence uses the <strong>subjunctive</strong> correctly?",
    opts:["If I was taller, I could reach it.","If I were taller, I could reach it.","If I am taller, I could reach it.","If I be taller, I could reach it."],answers:[1]},
 
-  {id:'g8',type:'mcq',section:'Sentence grammar',
+  {id:'g22',type:'mcq',section:'Sentence grammar',
    question:"Which sentence is written in the <strong>passive voice</strong>?",
    opts:["The chef cooked the meal.","The meal was cooked by the chef.","Cooking the meal took an hour.","The chef had been cooking all day."],answers:[1]},
 
-  {id:'g9',type:'tick',section:'Sentence grammar',
+  {id:'g23',type:'tick',section:'Sentence grammar',
    question:"Tick the sentence that uses <strong>direct speech</strong> correctly.",
    opts:["\"I love football\" said Tom.","\"I love football,\" said Tom.","\"I love football,\" Said Tom.","I love football, said Tom."],
    answers:[1]},
 
-  {id:'g10',type:'input',section:'Sentence grammar',
+  {id:'g24',type:'input',section:'Sentence grammar',
    question:"Add a <strong>subordinating conjunction</strong> to complete the sentence.\n\n\"She put on her coat _______ it was cold outside.\"",
    instruction:"Write one word.",
-   answers:["because","as","since","although","even though","when"],
+   answers:["because","as","since","although","when"],
    displayAnswer:"because / as / since"},
 
-  {id:'g11',type:'mcq',section:'Sentence grammar',
+  {id:'g25',type:'mcq',section:'Sentence grammar',
    question:"Which option correctly completes the sentence?\n\n\"Neither the boys nor their teacher _______ ready.\"",
    opts:["were","was","are","have been"],answers:[1]},
 
-  {id:'g12',type:'tick',section:'Sentence grammar',
+  {id:'g26',type:'tick',section:'Sentence grammar',
    question:"Tick <strong>two</strong> sentences that are in the <strong>past perfect</strong> tense.",
    opts:["She walked to school.","He had finished his lunch before the bell rang.","They were playing outside.","By the time we arrived, the film had already started."],
    answers:[1,3]},
 
-  /* ── PUNCTUATION ── */
-  {id:'g13',type:'mcq',section:'Punctuation',
-   question:"Which sentence uses an <strong>apostrophe for possession</strong> correctly?",
-   opts:["The dogs' bone was buried in the garden. (one dog)","The dog's bone was buried in the garden. (one dog)","The dogs bone was buried in the garden.","The dog's' bone was buried in the garden."],answers:[1]},
-
-  {id:'g14',type:'input',section:'Punctuation',
-   question:"Add the <strong>missing punctuation mark</strong> to complete this sentence correctly.\n\n\"The girls — Amira, Sofia and Priya — all passed their exams\"",
-   instruction:"Write the punctuation mark that is missing at the end.",
-   answers:[".","!"],
-   displayAnswer:". (full stop)"},
-
-  {id:'g15',type:'tick',section:'Punctuation',
-   question:"Tick the sentence that uses <strong>commas</strong> correctly.",
-   opts:["After the match, the team, celebrated with pizza.","After the match the team celebrated, with pizza.","After the match, the team celebrated with pizza.","After, the match the team celebrated with pizza."],
-   answers:[2]},
-
-  {id:'g16',type:'mcq',section:'Punctuation',
-   question:"Which sentence uses a <strong>colon</strong> correctly?",
-   opts:["She had one wish: to travel the world.","She had: one wish to travel the world.","She: had one wish to travel the world.","She had one wish to: travel the world."],answers:[0]},
-
-  {id:'g17',type:'tick',section:'Punctuation',
-   question:"Tick the sentence that uses <strong>inverted commas</strong> correctly.",
-   opts:["\"Stop right there! the officer shouted.","\"Stop right there!\" the officer shouted.","\"Stop right there!\" The officer shouted.","Stop right there!\" the officer shouted."],
-   answers:[1]},
-
-  /* ── VOCABULARY & WORD STRUCTURE ── */
-  {id:'g18',type:'mcq',section:'Vocabulary',
-   question:"What does the <strong>prefix</strong> <em>mis-</em> mean in the word <em>misunderstand</em>?",
-   opts:["Again","Wrongly","Before","Against"],answers:[1]},
-
-  {id:'g19',type:'mcq',section:'Vocabulary',
-   question:"Which word is the correct <strong>antonym</strong> of <em>ancient</em>?",
-   opts:["old","historical","modern","classic"],answers:[2]},
-
-  {id:'g20',type:'mcq',section:'Vocabulary',
-   question:"Which sentence uses the word <em>effect</em> correctly?",
-   opts:["The rain will effect our plans.","The medicine had a positive effect.","We need to effect more carefully.","How does this effect you?"],answers:[1]},
-
-  {id:'g21',type:'mcq',section:'Vocabulary',
-   question:"Which word correctly completes the sentence?\n\n\"The scientist made a _______ discovery.\"",
-   opts:["incredulous","incredible","incredulity","incredibly"],answers:[1]},
-
-  {id:'g22',type:'tick',section:'Vocabulary',
-   question:"Tick the word that has the <strong>same root</strong> as <em>photograph</em>.",
-   opts:["telephone","autograph","physics","phone"],
-   answers:[1]},
-
-  /* ── EXTRA ROTATION QUESTIONS ── */
-  {id:'g23',type:'mcq',section:'Word classes',
-   question:"Which word is a <strong>determiner</strong>?",
-   opts:["run","the","quickly","blue"],answers:[1]},
-
-  {id:'g24',type:'mcq',section:'Sentence grammar',
+  {id:'g27',type:'mcq',section:'Sentence grammar',
    question:"Which sentence uses the <strong>present perfect</strong> tense?",
    opts:["She runs every day.","She ran yesterday.","She has run five miles.","She was running earlier."],answers:[2]},
-
-  {id:'g25',type:'tick',section:'Punctuation',
-   question:"Tick the sentence that uses a <strong>semicolon</strong> correctly.",
-   opts:["It was raining; so they stayed inside.","It was raining; they stayed inside.","It; was raining they stayed inside.","It was; raining they stayed inside."],
-   answers:[1]},
-
-  {id:'g26',type:'mcq',section:'Word classes',
-   question:"In the sentence \"<em>She sang beautifully</em>\", what word class is <strong>beautifully</strong>?",
-   opts:["Adjective","Noun","Adverb","Verb"],answers:[2]},
-
-  {id:'g27',type:'mcq',section:'Punctuation',
-   question:"Which sentence uses <strong>brackets</strong> correctly?",
-   opts:["The planet Mars (known as the Red Planet) is the fourth from the Sun.","The planet Mars, (known as the Red Planet) is the fourth from the Sun.","The planet (Mars known as the Red Planet) is the fourth from the Sun.","The planet Mars known as (the Red Planet) is the fourth from the Sun."],answers:[0]},
 
   {id:'g28',type:'tick',section:'Sentence grammar',
    question:"Tick <strong>two</strong> sentences that contain a <strong>fronted adverbial</strong>.",
    opts:["She arrived late to the party.","Slowly and carefully, he opened the box.","At dawn, the birds began to sing.","The children played happily in the garden."],
    answers:[1,2]},
 
-  {id:'g29',type:'mcq',section:'Vocabulary',
+  {id:'g29',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence is a <strong>compound sentence</strong>?",
+   opts:["Although it was raining, she went outside.","She went outside because it was raining.","It was raining, but she went outside anyway.","She went outside when it stopped raining."],answers:[2]},
+
+  {id:'g30',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence is written in the <strong>future tense</strong>?",
+   opts:["She played tennis every day.","She is playing tennis now.","She will play tennis tomorrow.","She has played tennis before."],answers:[2]},
+
+  {id:'g31',type:'tick',section:'Sentence grammar',
+   question:"Tick the sentence that is written in the <strong>passive voice</strong>.",
+   opts:["The storm destroyed the bridge.","The bridge was destroyed by the storm.","A fierce storm hit the town.","They repaired the bridge quickly."],
+   answers:[1]},
+
+  {id:'g32',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence contains a <strong>subordinate clause</strong>?",
+   opts:["She sang and danced.","The dog barked loudly.","Although it was late, she kept reading.","Run to the gate now."],answers:[2]},
+
+  {id:'g33',type:'mcq',section:'Sentence grammar',
+   question:"What is the <strong>subject</strong> of this sentence?\n\n\"The enormous grey elephant splashed in the river.\"",
+   opts:["splashed","river","The enormous grey elephant","in the river"],answers:[2]},
+
+  {id:'g34',type:'tick',section:'Sentence grammar',
+   question:"Tick the sentence that uses <strong>reported speech</strong>.",
+   opts:["\"I am tired,\" said Maya.","Maya said that she was tired.","Maya: I am tired.","'I am tired' — Maya"],
+   answers:[1]},
+
+  {id:'g35',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence uses the <strong>past progressive</strong> tense?",
+   opts:["She had eaten breakfast.","She was eating breakfast when the phone rang.","She eats breakfast every day.","She ate breakfast quickly."],answers:[1]},
+
+  {id:'g36',type:'input',section:'Sentence grammar',
+   question:"What type of sentence is this?\n\n\"What an incredible goal that was!\"",
+   instruction:"Write one word: statement, question, command or exclamation.",
+   answers:["exclamation"],
+   displayAnswer:"exclamation"},
+
+  {id:'g37',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence is a <strong>complex sentence</strong>?",
+   opts:["She ran and he followed.","She ran quickly.","She ran because she was late.","She ran, then stopped."],answers:[2]},
+
+  {id:'g38',type:'tick',section:'Sentence grammar',
+   question:"Tick <strong>two</strong> sentences that use a <strong>modal verb</strong>.",
+   opts:["She could swim before she was four.","The rain fell heavily all day.","You should finish your vegetables.","He smiled and sat down."],
+   answers:[0,2]},
+
+  {id:'g39',type:'mcq',section:'Sentence grammar',
+   question:"Which word best completes this sentence in the <strong>subjunctive</strong>?\n\n\"The head teacher suggested that every pupil _______ present.\"",
+   opts:["was","is","were","be"],answers:[3]},
+
+  {id:'g40',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence uses <strong>indirect speech</strong> correctly?",
+   opts:["He said, \"I will be late.\"","He said that he would be late.","He said: I will be late.","\"I will be late,\" he said."],answers:[1]},
+
+  {id:'g41',type:'tick',section:'Sentence grammar',
+   question:"Tick the sentence that contains a <strong>relative clause</strong>.",
+   opts:["She walked slowly to school.","The trophy, which was gold, sat on the shelf.","He played football after school.","They arrived before the match started."],
+   answers:[1]},
+
+  {id:'g42',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence is written in the <strong>present perfect progressive</strong> tense?",
+   opts:["She has been reading for an hour.","She reads every night.","She had read the book before.","She was reading when I arrived."],answers:[0]},
+
+  /* ══ PUNCTUATION (22 questions) ══ */
+  {id:'g43',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses an <strong>apostrophe for possession</strong> correctly?",
+   opts:["The dogs' bone was buried in the garden. (one dog)","The dog's bone was buried in the garden. (one dog)","The dogs bone was buried in the garden.","The dog's' bone was buried in the garden."],answers:[1]},
+
+  {id:'g44',type:'input',section:'Punctuation',
+   question:"Add the <strong>missing punctuation mark</strong> to complete this sentence correctly.\n\n\"The girls — Amira, Sofia and Priya — all passed their exams\"",
+   instruction:"Write only the missing punctuation mark.",
+   answers:[".","!"],
+   displayAnswer:". (full stop)"},
+
+  {id:'g45',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses <strong>commas</strong> correctly.",
+   opts:["After the match, the team, celebrated with pizza.","After the match the team celebrated, with pizza.","After the match, the team celebrated with pizza.","After, the match the team celebrated with pizza."],
+   answers:[2]},
+
+  {id:'g46',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses a <strong>colon</strong> correctly?",
+   opts:["She had one wish: to travel the world.","She had: one wish to travel the world.","She: had one wish to travel the world.","She had one wish to: travel the world."],answers:[0]},
+
+  {id:'g47',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses <strong>inverted commas</strong> correctly.",
+   opts:["\"Stop right there! the officer shouted.","\"Stop right there!\" the officer shouted.","\"Stop right there!\" The officer shouted.","Stop right there!\" the officer shouted."],
+   answers:[1]},
+
+  {id:'g48',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses a <strong>semicolon</strong> correctly.",
+   opts:["It was raining; so they stayed inside.","It was raining; they stayed inside.","It; was raining they stayed inside.","It was; raining they stayed inside."],
+   answers:[1]},
+
+  {id:'g49',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses <strong>brackets</strong> correctly?",
+   opts:["The planet Mars (known as the Red Planet) is the fourth from the Sun.","The planet Mars, (known as the Red Planet) is the fourth from the Sun.","The planet (Mars known as the Red Planet) is the fourth.","The planet Mars known as (the Red Planet) is the fourth."],answers:[0]},
+
+  {id:'g50',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses the <strong>apostrophe for possession</strong> correctly for a plural noun?",
+   opts:["The childrens' coats were wet.","The children's coats were wet.","The childrens coats were wet.","The children's' coats were wet."],answers:[1]},
+
+  {id:'g51',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses <strong>dashes</strong> correctly.",
+   opts:["She opened the door — and gasped — at what she saw inside.","She — opened the door and gasped at what she saw inside.","She opened the door and — gasped at what she saw inside.","She opened — the door and gasped at what she saw inside."],
+   answers:[0]},
+
+  {id:'g52',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses a <strong>hyphen</strong> correctly?",
+   opts:["She wore a dark-blue coat to the party.","She wore a dark blue-coat to the party.","She wore a dark blue coat-to the party.","She wore a darkblue coat to-the party."],answers:[0]},
+
+  {id:'g53',type:'input',section:'Punctuation',
+   question:"What punctuation mark should go in the gap?\n\n\"Its a shame the match was cancelled.\"",
+   instruction:"Write only the punctuation mark name.",
+   answers:["apostrophe"],
+   displayAnswer:"apostrophe (It's — contraction of It is)"},
+
+  {id:'g54',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses a <strong>comma after a fronted adverbial</strong> correctly.",
+   opts:["Nervously she approached the stage.","Nervously, she approached the stage.","She, nervously approached the stage.","She approached, nervously the stage."],
+   answers:[1]},
+
+  {id:'g55',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses a <strong>colon to introduce a list</strong> correctly?",
+   opts:["You will need: a pen, a ruler and a pencil case.","You will need a pen: a ruler and a pencil case.","You: will need a pen, a ruler and a pencil case.","You will need a pen, a ruler: and a pencil case."],answers:[0]},
+
+  {id:'g56',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that punctuates <strong>direct speech</strong> correctly.",
+   opts:["\"Are you coming?\" she asked.","\"Are you coming?\" She asked.","\"Are you coming\" she asked?","Are you coming? she asked."],
+   answers:[0]},
+
+  {id:'g57',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses an <strong>ellipsis</strong> correctly?",
+   opts:["She opened the box and... gasped.","She opened... the box and gasped.","She... opened the box and gasped.","She opened the box... and... gasped."],answers:[0]},
+
+  {id:'g58',type:'mcq',section:'Punctuation',
+   question:"Where should the <strong>apostrophe</strong> go in this word?\n\ndoesnt",
+   opts:["doesn't","doe'snt","doesn't'","doesnt'"],answers:[0]},
+
+  {id:'g59',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses <strong>commas in a list</strong> correctly.",
+   opts:["I need bread milk eggs, and butter.","I need bread, milk, eggs and butter.","I need, bread, milk, eggs, and, butter.","I need bread milk, eggs and butter."],
+   answers:[1]},
+
+  {id:'g60',type:'mcq',section:'Punctuation',
+   question:"Which sentence correctly uses a <strong>semicolon</strong> to join two main clauses?",
+   opts:["She loved reading; and she loved writing too.","The sun set; painting the sky orange.","He was exhausted; he fell asleep immediately.","They ran quickly; because it was raining."],answers:[2]},
+
+  {id:'g61',type:'input',section:'Punctuation',
+   question:"What is the name of the punctuation mark used here?\n\n\"She packed everything she needed — her passport, her tickets and her keys.\"",
+   instruction:"Write one word.",
+   answers:["dash"],
+   displayAnswer:"dash"},
+
+  {id:'g62',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses an <strong>apostrophe for contraction</strong> correctly.",
+   opts:["They're going to the park later.","Their going to the park later.","There going to the park later.","They are going to the park later'"],
+   answers:[0]},
+
+  {id:'g63',type:'mcq',section:'Punctuation',
+   question:"Which sentence correctly uses a <strong>question mark</strong>?",
+   opts:["She wondered if it would rain?","Would it rain tomorrow.","Do you think it will rain?","I wonder if it will rain.?"],answers:[2]},
+
+  {id:'g64',type:'tick',section:'Punctuation',
+   question:"Tick <strong>two</strong> sentences that use <strong>apostrophes</strong> correctly.",
+   opts:["The boys' football kit was muddy. (more than one boy)","The boys football kit was muddy.","It's going to be a sunny day.","Its going to be a sunny day."],
+   answers:[0,2]},
+
+  /* ══ VOCABULARY (16 questions) ══ */
+  {id:'g65',type:'mcq',section:'Vocabulary',
+   question:"What does the <strong>prefix</strong> <em>mis-</em> mean in the word <em>misunderstand</em>?",
+   opts:["Again","Wrongly","Before","Against"],answers:[1]},
+
+  {id:'g66',type:'mcq',section:'Vocabulary',
+   question:"Which word is the correct <strong>antonym</strong> of <em>ancient</em>?",
+   opts:["old","historical","modern","classic"],answers:[2]},
+
+  {id:'g67',type:'mcq',section:'Vocabulary',
+   question:"Which sentence uses the word <em>effect</em> correctly?",
+   opts:["The rain will effect our plans.","The medicine had a positive effect.","We need to effect more carefully.","How does this effect you?"],answers:[1]},
+
+  {id:'g68',type:'mcq',section:'Vocabulary',
+   question:"Which word correctly completes the sentence?\n\n\"The scientist made a _______ discovery.\"",
+   opts:["incredulous","incredible","incredulity","incredibly"],answers:[1]},
+
+  {id:'g69',type:'tick',section:'Vocabulary',
+   question:"Tick the word that has the <strong>same root</strong> as <em>photograph</em>.",
+   opts:["telephone","autograph","physics","phone"],
+   answers:[1]},
+
+  {id:'g70',type:'mcq',section:'Vocabulary',
    question:"Which prefix makes <em>possible</em> mean the <strong>opposite</strong>?",
    opts:["un-","dis-","im-","mis-"],answers:[2]},
 
-  {id:'g30',type:'mcq',section:'Sentence grammar',
-   question:"Which sentence is a <strong>compound sentence</strong>?",
-   opts:["Although it was raining, she went outside.","She went outside because it was raining.","It was raining, but she went outside anyway.","She went outside when it stopped raining."],answers:[2]},
+  {id:'g71',type:'mcq',section:'Vocabulary',
+   question:"Which word is a <strong>synonym</strong> of <em>courageous</em>?",
+   opts:["timid","brave","nervous","careful"],answers:[1]},
+
+  {id:'g72',type:'mcq',section:'Vocabulary',
+   question:"Which sentence uses <em>affect</em> correctly?",
+   opts:["The cold weather will affect the harvest.","The cold weather will effect the harvest.","What affect did the medicine have?","The affect was immediate."],answers:[0]},
+
+  {id:'g73',type:'input',section:'Vocabulary',
+   question:"What does the suffix <strong>-tion</strong> tell you about a word?\n\n(For example: <em>celebration</em>, <em>information</em>)",
+   instruction:"Write one word.",
+   answers:["noun"],
+   displayAnswer:"noun (it turns verbs into nouns)"},
+
+  {id:'g74',type:'mcq',section:'Vocabulary',
+   question:"Which word has the prefix meaning <strong>against</strong>?",
+   opts:["submarine","international","antisocial","supermarket"],answers:[2]},
+
+  {id:'g75',type:'tick',section:'Vocabulary',
+   question:"Tick the sentence that uses <em>practice</em> correctly (the noun).",
+   opts:["I need to practise my spellings.","She went to football practice after school.","Can you practice your violin now?","He needs to practice more."],
+   answers:[1]},
+
+  {id:'g76',type:'mcq',section:'Vocabulary',
+   question:"Which word is the correct <strong>antonym</strong> of <em>cautious</em>?",
+   opts:["careful","nervous","reckless","thoughtful"],answers:[2]},
+
+  {id:'g77',type:'mcq',section:'Vocabulary',
+   question:"Which sentence uses <em>their</em>, <em>there</em> and <em>they're</em> correctly?",
+   opts:["Their going to there house because they're friends.","They're going to their house because there is room.","There going to their house because they're friends.","They're going to there house because their friends."],answers:[1]},
+
+  {id:'g78',type:'input',section:'Vocabulary',
+   question:"What does the prefix <strong>re-</strong> mean in the word <em>rewrite</em>?",
+   instruction:"Write one word.",
+   answers:["again"],
+   displayAnswer:"again"},
+
+  {id:'g79',type:'mcq',section:'Vocabulary',
+   question:"Which word correctly completes this sentence?\n\n\"Despite the rain, she _______ decided to walk to school.\"",
+   opts:["defiant","defiantly","defiance","defy"],answers:[1]},
+
+  {id:'g80',type:'tick',section:'Vocabulary',
+   question:"Tick <strong>two</strong> words that are <strong>synonyms</strong> of <em>frightened</em>.",
+   opts:["courageous","terrified","petrified","delighted"],
+   answers:[1,2]},
 ];
 
 /* ══ SPELLING BANK ══
