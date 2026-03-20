@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Year 5 English Tests</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1a2744;--blue:#2d6be4;--blue2:#1a4fb5;--sky:#e8f0fd;
+  --green:#1a9e5f;--green-bg:#e6f7ef;--red:#d63b3b;--red-bg:#fdeaea;
+  --amber:#b37c00;--amber-bg:#fff8e6;--purple:#6c3fcf;--purple-bg:#f0ebfd;
+  --teal:#0e7f72;--teal-bg:#e4f5f3;
+  --text:#1a2744;--muted:#6b7a99;--border:#d4dff7;
+  --bg:#f4f7fe;--white:#ffffff;--radius:12px;
+  --shadow:0 2px 16px rgba(45,107,228,.10);
+}
+html{font-size:16px}
+body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:4rem}
+
+.header{background:var(--navy);color:white;padding:2rem 1.5rem 1.5rem;text-align:center;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(108,63,207,.25)}
+.header::after{content:'';position:absolute;bottom:-40px;left:-40px;width:140px;height:140px;border-radius:50%;background:rgba(14,127,114,.2)}
+.header-inner{position:relative;z-index:1}
+.pencil-icon{font-size:2.5rem;margin-bottom:.5rem}
+.header h1{font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-.5px;margin-bottom:.25rem}
+.header p{font-size:.95rem;opacity:.75}
+.variant-badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:.2rem .75rem;font-size:.75rem;margin-top:.5rem}
+
+.main{max-width:900px;margin:0 auto;padding:0 1rem}
+
+/* NAME SCREEN */
+#name-screen{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow);padding:2.5rem 2rem;margin:2rem auto;max-width:520px;text-align:center}
+#name-screen h2{font-family:'Nunito',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:.5rem;color:var(--navy)}
+#name-screen p{color:var(--muted);font-size:.95rem;margin-bottom:1.5rem}
+.name-input{width:100%;font-family:'Nunito Sans',sans-serif;font-size:1.1rem;padding:.75rem 1rem;border:2px solid var(--border);border-radius:8px;color:var(--text);outline:none;transition:border-color .2s;margin-bottom:1.25rem}
+.name-input:focus{border-color:var(--blue)}
+
+/* TEST SELECTOR */
+.test-select-label{font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.75rem;display:block;text-align:left}
+.test-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem}
+.test-card{border:2px solid var(--border);border-radius:10px;padding:.9rem .75rem;cursor:pointer;transition:border-color .2s,background .2s,transform .1s;background:var(--bg);text-align:center;user-select:none}
+.test-card:hover{border-color:var(--blue);background:var(--sky)}
+.test-card.selected{border-color:var(--blue);background:var(--sky);transform:scale(1.02)}
+.test-card.selected .tc-icon{transform:scale(1.15)}
+.tc-icon{font-size:1.6rem;margin-bottom:.3rem;display:block;transition:transform .2s}
+.tc-name{font-family:'Nunito',sans-serif;font-weight:800;font-size:.85rem;color:var(--navy)}
+.tc-info{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+.btn-start{width:100%;font-family:'Nunito',sans-serif;font-weight:800;font-size:1.1rem;padding:.85rem;background:var(--blue);color:white;border:none;border-radius:8px;cursor:pointer;transition:background .2s,transform .1s}
+.btn-start:hover{background:var(--blue2)}
+.btn-start:active{transform:scale(.98)}
+.btn-start:disabled{opacity:.4;cursor:not-allowed}
+
+/* TEST SCREEN */
+#test-screen{display:none}
+.info-bar{display:flex;gap:10px;margin:1.5rem 0 1rem;flex-wrap:wrap}
+.info-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem 1rem;flex:1;min-width:110px;text-align:center;box-shadow:var(--shadow)}
+.info-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:2px}
+.info-val{font-family:'Nunito',sans-serif;font-size:1.4rem;font-weight:800;color:var(--navy)}
+#timer.warning{color:var(--red)}
+.progress-wrap{background:var(--border);border-radius:99px;height:6px;margin-bottom:1.5rem;overflow:hidden}
+.progress-fill{background:var(--blue);height:100%;border-radius:99px;transition:width .3s;width:0%}
+.section-title{font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--blue);border-bottom:2px solid var(--sky);padding-bottom:.4rem;margin:1.75rem 0 .9rem}
+
+/* GRAMMAR QUESTION CARDS */
+.g-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:10px}
+.g-card:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(45,107,228,.12)}
+.g-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:.6rem}
+.g-qnum{font-size:.75rem;color:var(--muted);font-weight:600;min-width:22px;padding-top:2px}
+.g-marks{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:auto;white-space:nowrap;background:var(--sky);color:var(--blue2)}
+.g-question{font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;color:var(--navy);line-height:1.6;margin-bottom:.75rem}
+.g-context{background:var(--bg);border-left:3px solid var(--purple);border-radius:0 6px 6px 0;padding:.6rem .9rem;font-size:.95rem;line-height:1.7;color:var(--text);margin-bottom:.75rem;font-style:italic}
+.g-instruction{font-size:.85rem;color:var(--muted);margin-bottom:.6rem}
+
+/* MCQ options */
+.g-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.25rem}
+.g-opts.single-col{grid-template-columns:1fr}
+.g-opt{font-family:'Nunito Sans',sans-serif;font-size:.95rem;padding:9px 14px;border-radius:8px;border:2px solid var(--border);background:var(--bg);cursor:pointer;user-select:none;transition:border-color .2s,background .2s;text-align:left;display:flex;align-items:center;gap:8px}
+.g-opt:hover{border-color:var(--blue);background:var(--sky)}
+.g-opt.selected{border-color:var(--blue);background:var(--sky)}
+.g-opt.correct-final{border-color:var(--green)!important;background:var(--green-bg)!important;color:var(--green)!important}
+.g-opt.wrong-final{border-color:var(--red)!important;background:var(--red-bg)!important;color:var(--red)!important}
+.g-opt.correct-reveal{border-color:var(--green)!important;background:var(--green-bg)!important;color:var(--green)!important}
+.g-opt-bullet{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800}
+.g-opt.selected .g-opt-bullet{border-color:var(--blue);background:var(--blue);color:white}
+.g-opt.correct-final .g-opt-bullet{border-color:var(--green);background:var(--green);color:white}
+.g-opt.wrong-final .g-opt-bullet{border-color:var(--red);background:var(--red);color:white}
+.g-opt.correct-reveal .g-opt-bullet{border-color:var(--green);background:var(--green);color:white}
+
+/* Tick boxes */
+.g-ticks{display:flex;flex-direction:column;gap:8px;margin-top:.25rem}
+.g-tick{display:flex;align-items:center;gap:10px;padding:8px 12px;border:2px solid var(--border);border-radius:8px;background:var(--bg);cursor:pointer;user-select:none;transition:border-color .2s,background .2s}
+.g-tick:hover{border-color:var(--blue);background:var(--sky)}
+.g-tick.ticked{border-color:var(--blue);background:var(--sky)}
+.g-tick.correct-final{border-color:var(--green)!important;background:var(--green-bg)!important}
+.g-tick.wrong-final{border-color:var(--red)!important;background:var(--red-bg)!important}
+.g-tick.correct-reveal{border-color:var(--green)!important;background:var(--green-bg)!important}
+.tick-box{width:20px;height:20px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;color:transparent}
+.g-tick.ticked .tick-box{border-color:var(--blue);background:var(--blue);color:white}
+.g-tick.correct-final .tick-box{border-color:var(--green);background:var(--green);color:white}
+.g-tick.wrong-final .tick-box{border-color:var(--red);background:var(--red);color:white}
+.g-tick.correct-reveal .tick-box{border-color:var(--green);background:var(--green);color:white}
+.tick-label{font-size:.95rem;color:var(--text)}
+
+/* Text input */
+.g-input{font-family:'Nunito Sans',sans-serif;font-size:1rem;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s;width:100%;margin-top:.25rem}
+.g-input:focus{border-color:var(--blue);background:var(--white)}
+.g-input.correct{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.g-input.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.g-check{font-size:1rem;margin-left:8px;display:none}
+.g-check.show{display:inline}
+.g-correct-ans{font-size:.82rem;color:var(--green);font-weight:600;margin-top:4px;display:none}
+.g-correct-ans.show{display:block}
+
+/* Sentence rewrite */
+.g-rewrite{width:100%;font-family:'Nunito Sans',sans-serif;font-size:.95rem;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s;resize:vertical;min-height:60px;margin-top:.25rem}
+.g-rewrite:focus{border-color:var(--blue);background:var(--white)}
+.g-rewrite.correct{border-color:var(--green);background:var(--green-bg)}
+.g-rewrite.wrong{border-color:var(--red);background:var(--red-bg)}
+
+/* Punctuation insertion — inline blanks */
+.g-passage{font-size:1rem;line-height:2;color:var(--text);margin-bottom:.5rem}
+.g-blank{display:inline-block;border-bottom:2px solid var(--navy);min-width:40px;text-align:center;font-family:'Nunito',sans-serif;font-weight:700;padding:0 4px;margin:0 2px}
+.g-inline-input{font-family:'Nunito',sans-serif;font-weight:700;font-size:.95rem;border:none;border-bottom:2px solid var(--border);background:transparent;color:var(--text);outline:none;width:60px;text-align:center;padding:2px 4px;transition:border-color .2s}
+.g-inline-input:focus{border-bottom-color:var(--blue)}
+.g-inline-input.correct{border-bottom-color:var(--green);color:var(--green)}
+.g-inline-input.wrong{border-bottom-color:var(--red);color:var(--red)}
+
+/* SPELLING CARDS */
+.sp-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:10px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.sp-num{font-size:.75rem;color:var(--muted);font-weight:600;min-width:22px}
+.sp-listen-btn{font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;padding:8px 16px;border-radius:8px;border:2px solid var(--purple);background:var(--purple-bg);color:var(--purple);cursor:pointer;user-select:none;transition:background .2s,transform .1s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.sp-listen-btn:hover{background:var(--purple);color:white}
+.sp-listen-btn:active{transform:scale(.97)}
+.sp-listen-btn.playing{background:var(--purple);color:white;animation:pulse .8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.65}}
+.sp-sentence{font-size:.9rem;color:var(--muted);flex:1;min-width:180px;line-height:1.5;font-style:italic}
+.sp-input{font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;padding:7px 12px;border:2px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);outline:none;transition:border-color .2s;width:180px}
+.sp-input:focus{border-color:var(--blue);background:var(--white)}
+.sp-input.correct{border-color:var(--green);background:var(--green-bg);color:var(--green)}
+.sp-input.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red)}
+.sp-check{font-size:1.1rem;display:none}
+.sp-check.show{display:inline}
+.sp-correct-word{font-size:.82rem;color:var(--green);font-weight:700;display:none}
+.sp-correct-word.show{display:block}
+.speech-warning{background:var(--amber-bg);border:1px solid var(--amber);border-radius:8px;padding:.75rem 1rem;font-size:.88rem;color:var(--amber);margin-bottom:1rem;display:none}
+.speech-warning.show{display:block}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;margin-top:2rem;flex-wrap:wrap}
+.btn{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;padding:.75rem 1.5rem;border-radius:8px;cursor:pointer;border:2px solid var(--border);background:var(--white);color:var(--text);transition:background .2s,transform .1s}
+.btn:hover{background:var(--sky)}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--blue);color:white;border-color:var(--blue)}
+.btn-primary:hover{background:var(--blue2)}
+
+/* RESULTS */
+#results-screen{display:none}
+.results-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;margin:1.5rem 0;box-shadow:var(--shadow)}
+.score-circle{width:120px;height:120px;border-radius:50%;background:var(--sky);border:5px solid var(--blue);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 1rem}
+.score-big{font-family:'Nunito',sans-serif;font-size:2.5rem;font-weight:800;color:var(--blue);line-height:1}
+.score-denom{font-size:.8rem;color:var(--muted)}
+.score-name{font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:.25rem}
+.score-band{font-size:1rem;color:var(--muted);margin-bottom:1rem}
+.band-chip{display:inline-block;padding:.3rem 1rem;border-radius:99px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;margin-bottom:1rem}
+.band-excellent{background:var(--green-bg);color:var(--green)}
+.band-good{background:var(--sky);color:var(--blue2)}
+.band-developing{background:var(--amber-bg);color:var(--amber)}
+.band-support{background:var(--red-bg);color:var(--red)}
+.email-status{font-size:.9rem;padding:.6rem 1rem;border-radius:8px;margin-top:.75rem;display:none}
+.email-status.sending{background:var(--sky);color:var(--blue2);display:block}
+.email-status.sent{background:var(--green-bg);color:var(--green);display:block}
+.email-status.failed{background:var(--red-bg);color:var(--red);display:block}
+.breakdown-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;color:var(--navy);margin:1.5rem 0 .75rem;text-align:left}
+.wrong-list{list-style:none}
+.wrong-item{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:8px;padding:.6rem 1rem;margin-bottom:6px;font-size:.9rem;display:flex;gap:.5rem;align-items:flex-start;flex-wrap:wrap}
+.wrong-qnum{color:var(--muted);font-size:.8rem;min-width:28px;padding-top:2px}
+.wrong-q{flex:1;font-weight:600}
+.wrong-correct{color:var(--green);font-weight:700}
+.wrong-given{color:var(--red);font-size:.82rem;width:100%;padding-left:34px}
+
+/* toast announcements */
+.toast{position:fixed;top:1.2rem;left:50%;transform:translateX(-50%) translateY(-120px);z-index:998;
+  background:var(--navy);color:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;
+  padding:.75rem 1.5rem;border-radius:99px;box-shadow:0 4px 24px rgba(0,0,0,.25);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;white-space:nowrap;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast.amber{background:var(--amber);}
+.toast.red{background:var(--red);}
+
+/* 2-min warning */
+.time-warning-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;align-items:center;justify-content:center}
+.time-warning-overlay.show{display:flex}
+.time-warning-box{background:var(--white);border-radius:var(--radius);padding:2rem 2.5rem;text-align:center;max-width:340px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.25);border-top:5px solid var(--red)}
+.time-warning-box .tw-icon{font-size:2.5rem;margin-bottom:.5rem}
+.time-warning-box h3{font-family:'Nunito',sans-serif;font-size:1.3rem;font-weight:800;color:var(--red);margin-bottom:.4rem}
+.time-warning-box p{font-size:.95rem;color:var(--muted);margin-bottom:1.25rem;line-height:1.5}
+.time-warning-box .btn-warn{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;padding:.7rem 1.75rem;background:var(--red);color:white;border:none;border-radius:8px;cursor:pointer}
+.time-warning-box .btn-warn:hover{background:#b83232}
+
+@media(max-width:600px){
+  .header h1{font-size:1.4rem}
+  .info-val{font-size:1.1rem}
+  .test-cards{grid-template-columns:1fr}
+  .g-opts{grid-template-columns:1fr}
+  .sp-card{flex-direction:column;align-items:flex-start}
+  .sp-input{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="pencil-icon">📝</div>
+    <h1 id="header-title">Year 5 English Tests</h1>
+    <p id="header-sub">Based on NFER format</p>
+    <div class="variant-badge" id="variant-badge">Loading...</div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- NAME + TEST SELECTION -->
+<div id="name-screen">
+  <h2>Before you start...</h2>
+  <p>Enter your first name, then choose which test you'd like to do today.</p>
+  <input class="name-input" id="pupil-name" type="text" placeholder="Your first name" maxlength="40">
+
+  <span class="test-select-label">Which test would you like to do?</span>
+  <div class="test-cards">
+    <div class="test-card" id="tc-grammar" onclick="selectTest('grammar')">
+      <span class="tc-icon">✏️</span>
+      <div class="tc-name">Grammar &amp; Punctuation</div>
+      <div class="tc-info">20 questions · 45 min</div>
+    </div>
+    <div class="test-card" id="tc-spelling" onclick="selectTest('spelling')">
+      <span class="tc-icon">🔊</span>
+      <div class="tc-name">Spelling</div>
+      <div class="tc-info">20 words · 15 min</div>
+    </div>
+  </div>
+  <button class="btn-start" id="btn-start" onclick="startTest()" disabled>Select a test to begin →</button>
+</div>
+
+<!-- TEST SCREEN -->
+<div id="test-screen">
+  <div class="info-bar">
+    <div class="info-card"><div class="info-label">Time left</div><div class="info-val" id="timer">45:00</div></div>
+    <div class="info-card"><div class="info-label">Answered</div><div class="info-val" id="answered">0 / 20</div></div>
+    <div class="info-card"><div class="info-label">Child</div><div class="info-val" id="name-display" style="font-size:1rem">—</div></div>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="progress"></div></div>
+  <div class="speech-warning" id="speech-warning">⚠️ Your browser may not support audio. If the Listen button doesn't work, try Chrome or Safari.</div>
+  <div id="test-area"></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="markTest()">✓ Submit &amp; mark my test</button>
+    <button class="btn" onclick="confirmReset()">↺ Start again</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results-screen">
+  <div class="results-card">
+    <div class="score-circle">
+      <div class="score-big" id="res-score"></div>
+      <div class="score-denom" id="res-denom">out of 20</div>
+    </div>
+    <div class="score-name" id="res-name"></div>
+    <div class="score-band" id="res-band"></div>
+    <div id="res-chip" class="band-chip"></div>
+    <div class="email-status" id="email-status"></div>
+  </div>
+  <div class="breakdown-title" id="breakdown-title"></div>
+  <ul class="wrong-list" id="wrong-list"></ul>
+  <div class="btn-row" style="justify-content:center;margin-top:1rem">
+    <button class="btn btn-primary" onclick="resetAll()">↺ Take another test</button>
+  </div>
+</div>
+
+</div>
+
+<!-- toast notification -->
+<div class="toast" id="toast"></div>
+
+<!-- 2-minute warning -->
+<div class="time-warning-overlay" id="time-warning-overlay">
+  <div class="time-warning-box">
+    <div class="tw-icon">⏰</div>
+    <h3>2 minutes left!</h3>
+    <p>You have 2 minutes remaining. Try to check your answers and fill in any blanks!</p>
+    <button class="btn-warn" onclick="dismissWarning()">OK, got it!</button>
+  </div>
+</div>
+
+<script>
+/* ══ CONFIG ══ */
+const EJS_KEY="BMMGXE8I6OtVeMROI",EJS_SVC="service_wtgin0l",EJS_TPL="template_tb01514",P_EMAIL="vafgeo@gmail.com";
+emailjs.init(EJS_KEY);
+
+/* ══ GRAMMAR & PUNCTUATION BANK ══
+   type: 'mcq' | 'tick' | 'input' | 'rewrite'
+   For tick: answers = array of correct option indices (can be multiple)
+   For mcq:  answers = [correct index]
+   For input: answers = array of accepted strings (lowercase compared)
+   For rewrite: teacher-marked, always scores 1 if anything written (flagged for parent review)
+*/
+const GRAMMAR_BANK=[
+
+  /* ── WORD CLASSES ── */
+  {id:'g1',type:'mcq',section:'Word classes',
+   question:"Which word is a <strong>pronoun</strong>?",
+   opts:["quickly","them","beautiful","running"],answers:[1]},
+
+  {id:'g2',type:'mcq',section:'Word classes',
+   question:"Which underlined word is an <strong>adverb</strong>?",
+   context:"She <u>quietly</u> opened the door and <u>walked</u> into the <u>dark</u> room.",
+   opts:["quietly","walked","dark","opened"],answers:[0]},
+
+  {id:'g3',type:'tick',section:'Word classes',
+   question:"Tick <strong>two</strong> sentences that contain a <strong>modal verb</strong>.",
+   opts:["She might arrive later.","The dog ran across the field.","You must finish your homework.","He kicked the ball hard."],
+   answers:[0,2]},
+
+  {id:'g4',type:'mcq',section:'Word classes',
+   question:"Which word is a <strong>preposition</strong>?",
+   opts:["jump","beneath","slowly","happy"],answers:[1]},
+
+  {id:'g5',type:'mcq',section:'Word classes',
+   question:"What type of word is <strong>freedom</strong>?",
+   opts:["Verb","Adjective","Abstract noun","Proper noun"],answers:[2]},
+
+  {id:'g6',type:'tick',section:'Word classes',
+   question:"Tick the sentence that contains a <strong>relative clause</strong>.",
+   opts:["The boy ran quickly down the street.","The girl, who had red hair, won the race.","They arrived early and found a seat.","She smiled because she was happy."],
+   answers:[1]},
+
+  /* ── SENTENCE GRAMMAR ── */
+  {id:'g7',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence uses the <strong>subjunctive</strong> correctly?",
+   opts:["If I was taller, I could reach it.","If I were taller, I could reach it.","If I am taller, I could reach it.","If I be taller, I could reach it."],answers:[1]},
+
+  {id:'g8',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence is written in the <strong>passive voice</strong>?",
+   opts:["The chef cooked the meal.","The meal was cooked by the chef.","Cooking the meal took an hour.","The chef had been cooking all day."],answers:[1]},
+
+  {id:'g9',type:'tick',section:'Sentence grammar',
+   question:"Tick the sentence that uses <strong>direct speech</strong> correctly.",
+   opts:["\"I love football\" said Tom.","\"I love football,\" said Tom.","\"I love football,\" Said Tom.","I love football, said Tom."],
+   answers:[1]},
+
+  {id:'g10',type:'input',section:'Sentence grammar',
+   question:"Add a <strong>subordinating conjunction</strong> to complete the sentence.\n\n\"She put on her coat _______ it was cold outside.\"",
+   instruction:"Write one word.",
+   answers:["because","as","since","although","even though","when"],
+   displayAnswer:"because / as / since"},
+
+  {id:'g11',type:'mcq',section:'Sentence grammar',
+   question:"Which option correctly completes the sentence?\n\n\"Neither the boys nor their teacher _______ ready.\"",
+   opts:["were","was","are","have been"],answers:[1]},
+
+  {id:'g12',type:'tick',section:'Sentence grammar',
+   question:"Tick <strong>two</strong> sentences that are in the <strong>past perfect</strong> tense.",
+   opts:["She walked to school.","He had finished his lunch before the bell rang.","They were playing outside.","By the time we arrived, the film had already started."],
+   answers:[1,3]},
+
+  /* ── PUNCTUATION ── */
+  {id:'g13',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses an <strong>apostrophe for possession</strong> correctly?",
+   opts:["The dogs' bone was buried in the garden. (one dog)","The dog's bone was buried in the garden. (one dog)","The dogs bone was buried in the garden.","The dog's' bone was buried in the garden."],answers:[1]},
+
+  {id:'g14',type:'input',section:'Punctuation',
+   question:"Add the <strong>missing punctuation mark</strong> to complete this sentence correctly.\n\n\"The girls — Amira, Sofia and Priya — all passed their exams\"",
+   instruction:"Write the punctuation mark that is missing at the end.",
+   answers:[".","!"],
+   displayAnswer:". (full stop)"},
+
+  {id:'g15',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses <strong>commas</strong> correctly.",
+   opts:["After the match, the team, celebrated with pizza.","After the match the team celebrated, with pizza.","After the match, the team celebrated with pizza.","After, the match the team celebrated with pizza."],
+   answers:[2]},
+
+  {id:'g16',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses a <strong>colon</strong> correctly?",
+   opts:["She had one wish: to travel the world.","She had: one wish to travel the world.","She: had one wish to travel the world.","She had one wish to: travel the world."],answers:[0]},
+
+  {id:'g17',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses <strong>inverted commas</strong> correctly.",
+   opts:["\"Stop right there! the officer shouted.","\"Stop right there!\" the officer shouted.","\"Stop right there!\" The officer shouted.","Stop right there!\" the officer shouted."],
+   answers:[1]},
+
+  /* ── VOCABULARY & WORD STRUCTURE ── */
+  {id:'g18',type:'mcq',section:'Vocabulary',
+   question:"What does the <strong>prefix</strong> <em>mis-</em> mean in the word <em>misunderstand</em>?",
+   opts:["Again","Wrongly","Before","Against"],answers:[1]},
+
+  {id:'g19',type:'mcq',section:'Vocabulary',
+   question:"Which word is the correct <strong>antonym</strong> of <em>ancient</em>?",
+   opts:["old","historical","modern","classic"],answers:[2]},
+
+  {id:'g20',type:'mcq',section:'Vocabulary',
+   question:"Which sentence uses the word <em>effect</em> correctly?",
+   opts:["The rain will effect our plans.","The medicine had a positive effect.","We need to effect more carefully.","How does this effect you?"],answers:[1]},
+
+  {id:'g21',type:'mcq',section:'Vocabulary',
+   question:"Which word correctly completes the sentence?\n\n\"The scientist made a _______ discovery.\"",
+   opts:["incredulous","incredible","incredulity","incredibly"],answers:[1]},
+
+  {id:'g22',type:'tick',section:'Vocabulary',
+   question:"Tick the word that has the <strong>same root</strong> as <em>photograph</em>.",
+   opts:["telephone","autograph","physics","phone"],
+   answers:[1]},
+
+  /* ── EXTRA ROTATION QUESTIONS ── */
+  {id:'g23',type:'mcq',section:'Word classes',
+   question:"Which word is a <strong>determiner</strong>?",
+   opts:["run","the","quickly","blue"],answers:[1]},
+
+  {id:'g24',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence uses the <strong>present perfect</strong> tense?",
+   opts:["She runs every day.","She ran yesterday.","She has run five miles.","She was running earlier."],answers:[2]},
+
+  {id:'g25',type:'tick',section:'Punctuation',
+   question:"Tick the sentence that uses a <strong>semicolon</strong> correctly.",
+   opts:["It was raining; so they stayed inside.","It was raining; they stayed inside.","It; was raining they stayed inside.","It was; raining they stayed inside."],
+   answers:[1]},
+
+  {id:'g26',type:'mcq',section:'Word classes',
+   question:"In the sentence \"<em>She sang beautifully</em>\", what word class is <strong>beautifully</strong>?",
+   opts:["Adjective","Noun","Adverb","Verb"],answers:[2]},
+
+  {id:'g27',type:'mcq',section:'Punctuation',
+   question:"Which sentence uses <strong>brackets</strong> correctly?",
+   opts:["The planet Mars (known as the Red Planet) is the fourth from the Sun.","The planet Mars, (known as the Red Planet) is the fourth from the Sun.","The planet (Mars known as the Red Planet) is the fourth from the Sun.","The planet Mars known as (the Red Planet) is the fourth from the Sun."],answers:[0]},
+
+  {id:'g28',type:'tick',section:'Sentence grammar',
+   question:"Tick <strong>two</strong> sentences that contain a <strong>fronted adverbial</strong>.",
+   opts:["She arrived late to the party.","Slowly and carefully, he opened the box.","At dawn, the birds began to sing.","The children played happily in the garden."],
+   answers:[1,2]},
+
+  {id:'g29',type:'mcq',section:'Vocabulary',
+   question:"Which prefix makes <em>possible</em> mean the <strong>opposite</strong>?",
+   opts:["un-","dis-","im-","mis-"],answers:[2]},
+
+  {id:'g30',type:'mcq',section:'Sentence grammar',
+   question:"Which sentence is a <strong>compound sentence</strong>?",
+   opts:["Although it was raining, she went outside.","She went outside because it was raining.","It was raining, but she went outside anyway.","She went outside when it stopped raining."],answers:[2]},
+];
+
+/* ══ SPELLING BANK ══
+   All 100 official Y5/6 statutory words (National Curriculum Appendix 1)
+   Each entry: word, sentence with ___ where the word goes
+   20 words randomly selected per test
+*/
+const SPELLING_BANK=[
+  {word:"accommodate",sentence:"The hotel could ___ up to two hundred guests."},
+  {word:"accompany",sentence:"She asked her friend to ___ her to the dentist."},
+  {word:"according",sentence:"___ to the weather forecast, it will rain tomorrow."},
+  {word:"achieve",sentence:"If you work hard, you can ___ anything you set your mind to."},
+  {word:"aggressive",sentence:"The dog became ___ when a stranger approached the gate."},
+  {word:"amateur",sentence:"He was an ___ painter who sold his work at the local market."},
+  {word:"ancient",sentence:"They visited an ___ castle that was built over a thousand years ago."},
+  {word:"apparent",sentence:"It was ___ from her expression that she was upset."},
+  {word:"appreciate",sentence:"I really ___ your help with the project."},
+  {word:"attached",sentence:"Please find the letter ___ to this email."},
+  {word:"available",sentence:"Is the head teacher ___ to speak with me this afternoon?"},
+  {word:"average",sentence:"The ___ temperature in July is much higher than in January."},
+  {word:"awkward",sentence:"There was an ___ silence when nobody knew the answer."},
+  {word:"bargain",sentence:"She found a real ___ at the charity shop — a coat for just two pounds."},
+  {word:"bruise",sentence:"He got a nasty ___ on his knee after falling off his bike."},
+  {word:"category",sentence:"Each animal belongs to a different ___."},
+  {word:"cemetery",sentence:"The old ___ was filled with moss-covered gravestones."},
+  {word:"committee",sentence:"The school ___ met every Monday to discuss the timetable."},
+  {word:"communicate",sentence:"It is important to ___ clearly when working in a team."},
+  {word:"community",sentence:"The whole ___ came together to clean up the park."},
+  {word:"competition",sentence:"She entered the poetry ___ and won first prize."},
+  {word:"conscience",sentence:"His ___ told him it was wrong to lie."},
+  {word:"conscious",sentence:"She was ___ of the fact that everyone was watching her."},
+  {word:"controversy",sentence:"The new school rules caused quite a ___."},
+  {word:"convenience",sentence:"The shop was open late for the ___ of local residents."},
+  {word:"correspond",sentence:"The pen pals agreed to ___ by letter every month."},
+  {word:"criticise",sentence:"It is easy to ___ others, but harder to offer solutions."},
+  {word:"curiosity",sentence:"___ led her to open the mysterious box."},
+  {word:"definite",sentence:"We need a ___ answer by Friday."},
+  {word:"desperate",sentence:"The lost puppy looked ___ for somewhere warm to sleep."},
+  {word:"determined",sentence:"She was ___ to finish the race despite the heavy rain."},
+  {word:"develop",sentence:"Scientists continue to ___ new medicines every year."},
+  {word:"dictionary",sentence:"If you are unsure of a word's meaning, look it up in a ___."},
+  {word:"disastrous",sentence:"The flooding had a ___ effect on the town."},
+  {word:"embarrass",sentence:"It can ___ people when they make a mistake in public."},
+  {word:"environment",sentence:"We must protect the ___ for future generations."},
+  {word:"equip",sentence:"The school will ___ every pupil with the tools they need to succeed."},
+  {word:"especially",sentence:"She loved all animals, ___ dogs and horses."},
+  {word:"exaggerate",sentence:"He tends to ___ when telling stories about his holiday."},
+  {word:"excellent",sentence:"The teacher said the project was ___ and gave it full marks."},
+  {word:"existence",sentence:"The ___ of dinosaurs was proven through fossils."},
+  {word:"familiar",sentence:"The smell of fresh bread was ___ and comforting."},
+  {word:"foreign",sentence:"She loves trying ___ food when she travels."},
+  {word:"forty",sentence:"There are ___ children in the sports hall waiting for the assembly."},
+  {word:"frequently",sentence:"She ___ visits her grandparents at the weekend."},
+  {word:"government",sentence:"The ___ announced new rules about recycling."},
+  {word:"guarantee",sentence:"The shop gave a one-year ___ with every product it sold."},
+  {word:"harass",sentence:"It is wrong to ___ people online or in person."},
+  {word:"hindrance",sentence:"The noise outside was a ___ to her concentration."},
+  {word:"identity",sentence:"Your passport proves your ___."},
+  {word:"immediately",sentence:"The teacher asked the class to sit down ___."},
+  {word:"individual",sentence:"Every ___ in the class had a different opinion."},
+  {word:"interfere",sentence:"Please do not ___ when others are speaking."},
+  {word:"interrupt",sentence:"It is rude to ___ someone while they are talking."},
+  {word:"language",sentence:"French is a beautiful ___ to learn."},
+  {word:"leisure",sentence:"Reading is a popular ___ activity."},
+  {word:"lightning",sentence:"A bolt of ___ lit up the sky during the storm."},
+  {word:"marvellous",sentence:"The acrobat performed a truly ___ display at the circus."},
+  {word:"mischievous",sentence:"The ___ puppy chewed through the cushions while nobody was watching."},
+  {word:"muscle",sentence:"He pulled a ___ during the football match."},
+  {word:"necessary",sentence:"It is ___ to bring your PE kit on Wednesdays."},
+  {word:"neighbour",sentence:"Our next-door ___ brought us some tomatoes from her garden."},
+  {word:"nuisance",sentence:"The roadworks were a ___ for local residents."},
+  {word:"occupy",sentence:"The army decided to ___ the abandoned building."},
+  {word:"occur",sentence:"Earthquakes ___ more frequently in certain parts of the world."},
+  {word:"opportunity",sentence:"This trip is a wonderful ___ to learn about history."},
+  {word:"parliament",sentence:"Laws in the UK are made by ___."},
+  {word:"persuade",sentence:"She tried to ___ her parents to let her stay up late."},
+  {word:"physical",sentence:"Regular ___ exercise is important for good health."},
+  {word:"prejudice",sentence:"It is wrong to judge someone based on ___ rather than facts."},
+  {word:"privilege",sentence:"It is a great ___ to represent your school in a competition."},
+  {word:"profession",sentence:"Teaching is a rewarding ___ that makes a difference every day."},
+  {word:"programme",sentence:"The TV ___ about nature was fascinating."},
+  {word:"pronunciation",sentence:"The ___ of some English words can be very tricky."},
+  {word:"queue",sentence:"We had to ___ for over an hour to get into the theme park."},
+  {word:"recognise",sentence:"She did not ___ her old friend at first because of his new haircut."},
+  {word:"recommend",sentence:"Could you ___ a good book for me to read this summer?"},
+  {word:"relevant",sentence:"Make sure your answer is ___ to the question."},
+  {word:"restaurant",sentence:"They went to a lovely Italian ___ to celebrate her birthday."},
+  {word:"rhyme",sentence:"The poet chose words that would ___ at the end of each line."},
+  {word:"rhythm",sentence:"The drummer kept a steady ___ throughout the song."},
+  {word:"sacrifice",sentence:"Soldiers made the ultimate ___ to protect their country."},
+  {word:"secretary",sentence:"The school ___ answered the telephone and took a message."},
+  {word:"shoulder",sentence:"She carried her heavy bag over one ___."},
+  {word:"signature",sentence:"Please write your ___ at the bottom of the form."},
+  {word:"sincere",sentence:"She wrote a ___ letter of apology to her friend."},
+  {word:"soldier",sentence:"The brave ___ returned home after six months abroad."},
+  {word:"stomach",sentence:"He had butterflies in his ___ before the big match."},
+  {word:"sufficient",sentence:"Is there ___ food for everyone at the party?"},
+  {word:"suggest",sentence:"Can you ___ a good book to read this weekend?"},
+  {word:"symbol",sentence:"The dove is a ___ of peace."},
+  {word:"system",sentence:"The school introduced a new reward ___ this term."},
+  {word:"temperature",sentence:"The ___ dropped sharply overnight and frost covered the ground."},
+  {word:"thorough",sentence:"She did a ___ job of cleaning the classroom before inspection."},
+  {word:"twelfth",sentence:"Her birthday falls on the ___ of December, the day before mine."},
+  {word:"variety",sentence:"The market sold a great ___ of fresh vegetables."},
+  {word:"vegetable",sentence:"Broccoli is Viktor's least favourite ___."},
+  {word:"vehicle",sentence:"A bicycle is a non-motorised ___."},
+  {word:"yacht",sentence:"They sailed across the bay on a beautiful white ___."},
+];
+
+/* ══ HELPERS ══ */
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=0|Math.random()*(i+1);[b[i],b[j]]=[b[j],b[i]];}return b;}
+function pick(a,n){return shuffle(a).slice(0,n);}
+function el(tag,cls){const e=document.createElement(tag);if(cls)e.className=cls;return e;}
+
+/* ══ STATE ══ */
+let timerInterval,seconds=45*60,pupilName='',variantCode='',selectedTest='';
+let currentGrammar=[],currentSpelling=[];
+let allQs=[],tickSelections={},mcqSelections={};
+
+/* ══ TEST SELECTION ══ */
+function selectTest(t){
+  selectedTest=t;
+  ['grammar','spelling'].forEach(k=>document.getElementById('tc-'+k).classList.remove('selected'));
+  document.getElementById('tc-'+t).classList.add('selected');
+  document.getElementById('btn-start').disabled=false;
+  document.getElementById('btn-start').textContent='Start the test →';
+}
+
+/* ══ GENERATE ══ */
+function generateTest(){
+  variantCode='Test #'+(0|Math.random()*9000+1000);
+  document.getElementById('variant-badge').textContent=variantCode;
+  currentGrammar=pick(GRAMMAR_BANK,20);
+  currentSpelling=pick(SPELLING_BANK,20);
+}
+
+/* ══ BUILD DOM ══ */
+function buildTest(){
+  const area=document.getElementById('test-area');
+  area.innerHTML='';allQs=[];tickSelections={};mcqSelections={};
+  let totalQ=20;
+
+  if(selectedTest==='grammar'){
+    seconds=45*60;
+    document.getElementById('header-title').textContent='Year 5 Grammar & Punctuation';
+    document.getElementById('header-sub').textContent='20 questions · 45 minutes · Based on NFER format';
+    document.getElementById('res-denom').textContent='out of 20';
+    document.getElementById('answered').textContent='0 / 20';
+
+    let lastSection='';
+    currentGrammar.forEach((q,qi)=>{
+      if(q.section!==lastSection){
+        const h=el('div','section-title');h.textContent=q.section;area.appendChild(h);
+        lastSection=q.section;
+      }
+      allQs.push({type:'grammar',id:q.id,qi,data:q,num:qi+1});
+      area.appendChild(buildGrammarDOM(q,qi+1,qi));
+    });
+
+  } else {
+    seconds=15*60;
+    document.getElementById('header-title').textContent='Year 5 Spelling Test';
+    document.getElementById('header-sub').textContent='20 words · 15 minutes · Listen and type each word';
+    document.getElementById('res-denom').textContent='out of 20';
+    document.getElementById('answered').textContent='0 / 20';
+
+    // Check speech support
+    if(!('speechSynthesis' in window)){
+      document.getElementById('speech-warning').classList.add('show');
+    }
+
+    const h=el('div','section-title');h.textContent='Listen and write the word you hear';area.appendChild(h);
+    const hint=el('div','');
+    hint.style.cssText='font-size:.85rem;color:var(--muted);margin-bottom:1rem;line-height:1.5';
+    hint.innerHTML='Press <strong>Listen</strong> to hear the word used in a sentence. You can press it more than once. Then type the word in the box.';
+    area.appendChild(hint);
+
+    currentSpelling.forEach((s,si)=>{
+      allQs.push({type:'spelling',si,word:s.word,num:si+1});
+      area.appendChild(buildSpellingDOM(s,si+1,si));
+    });
+  }
+
+  const mm=Math.floor(seconds/60);
+  document.getElementById('timer').textContent=mm+':00';
+  updateProgress();
+}
+
+/* ══ GRAMMAR DOM ══ */
+function buildGrammarDOM(q,num,qi){
+  const card=el('div','g-card');card.id='gcard-'+qi;
+  let html=`<div class="g-header"><span class="g-qnum">${num}.</span><span class="g-marks">1 mark</span></div>`;
+  if(q.context) html+=`<div class="g-context">${q.context}</div>`;
+  html+=`<div class="g-question">${q.question.replace(/\n/g,'<br>')}</div>`;
+  if(q.instruction) html+=`<div class="g-instruction">${q.instruction}</div>`;
+
+  if(q.type==='mcq'){
+    const colClass=q.opts.some(o=>o.length>30)?'g-opts single-col':'g-opts';
+    html+=`<div class="${colClass}" id="gopt-${qi}">`;
+    q.opts.forEach((opt,oi)=>{
+      html+=`<div class="g-opt" data-qi="${qi}" data-oi="${oi}" onclick="gMcqClick(${qi},${oi})">
+        <span class="g-opt-bullet"></span><span>${opt}</span></div>`;
+    });
+    html+=`</div>`;
+
+  } else if(q.type==='tick'){
+    html+=`<div class="g-ticks" id="gtick-${qi}">`;
+    q.opts.forEach((opt,oi)=>{
+      html+=`<div class="g-tick" data-qi="${qi}" data-oi="${oi}" onclick="gTickClick(${qi},${oi})">
+        <span class="tick-box">✓</span><span class="tick-label">${opt}</span></div>`;
+    });
+    html+=`</div>`;
+    if(!tickSelections[qi])tickSelections[qi]=[];
+
+  } else if(q.type==='input'){
+    html+=`<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <input class="g-input" type="text" id="ginp-${qi}" autocomplete="off" oninput="updateProgress()" placeholder="Type your answer">
+      <span class="g-check" id="gchk-${qi}"></span>
+    </div>
+    <div class="g-correct-ans" id="gans-${qi}"></div>`;
+
+  } else if(q.type==='rewrite'){
+    html+=`<textarea class="g-rewrite" id="ginp-${qi}" oninput="updateProgress()" placeholder="Rewrite the sentence here..."></textarea>
+    <div class="g-correct-ans" id="gans-${qi}"></div>`;
+  }
+
+  card.innerHTML=html;
+  return card;
+}
+
+function gMcqClick(qi,oi){
+  const opts=document.querySelectorAll(`#gopt-${qi} .g-opt`);
+  opts.forEach(o=>o.classList.remove('selected'));
+  opts[oi].classList.add('selected');
+  mcqSelections[qi]=oi;
+  updateProgress();
+}
+
+function gTickClick(qi,oi){
+  if(!tickSelections[qi])tickSelections[qi]=[];
+  const tick=document.querySelector(`#gtick-${qi} .g-tick[data-oi="${oi}"]`);
+  const idx=tickSelections[qi].indexOf(oi);
+  if(idx>=0){tickSelections[qi].splice(idx,1);tick.classList.remove('ticked');}
+  else{tickSelections[qi].push(oi);tick.classList.add('ticked');}
+  updateProgress();
+}
+
+/* ══ SPELLING DOM ══ */
+function buildSpellingDOM(s,num,si){
+  const card=el('div','sp-card');card.id='spcard-'+si;
+  card.innerHTML=`
+    <span class="sp-num">${num}.</span>
+    <button class="sp-listen-btn" id="splisten-${si}" onclick="speakWord(${si})">🔊 Listen</button>
+    <span class="sp-sentence" id="spsentence-${si}">${s.sentence.replace(s.word,'________')}</span>
+    <input class="sp-input" type="text" id="spinp-${si}" autocomplete="off" autocorrect="off" spellcheck="false"
+      oninput="updateProgress()" placeholder="Type the word">
+    <span class="sp-check" id="spchk-${si}"></span>
+    <span class="sp-correct-word" id="spword-${si}"></span>`;
+  return card;
+}
+
+/* ══ SPEECH SYNTHESIS ══ */
+let currentUtterance=null;
+function speakWord(si){
+  if(!('speechSynthesis' in window)){
+    document.getElementById('speech-warning').classList.add('show');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const s=currentSpelling[si];
+  const btn=document.getElementById('splisten-'+si);
+
+  // Read: "The word is [word]. [sentence with word]. [word]."
+  const text=`The word is... ${s.word}. ... ${s.sentence.replace('___',s.word)}. ... ${s.word}.`;
+  const utt=new SpeechSynthesisUtterance(text);
+  utt.lang='en-GB';
+  utt.rate=0.88;
+  utt.pitch=1;
+
+  // Try to pick a British English voice
+  const voices=window.speechSynthesis.getVoices();
+  const gbVoice=voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+  if(gbVoice)utt.voice=gbVoice;
+
+  btn.classList.add('playing');
+  utt.onend=()=>btn.classList.remove('playing');
+  utt.onerror=()=>btn.classList.remove('playing');
+  currentUtterance=utt;
+  window.speechSynthesis.speak(utt);
+}
+
+// Voices load async on some browsers
+window.speechSynthesis&&window.speechSynthesis.addEventListener('voiceschanged',()=>{});
+
+/* ══ PROGRESS ══ */
+function updateProgress(){
+  let done=0;
+  if(selectedTest==='grammar'){
+    allQs.forEach(q=>{
+      const d=q.data;
+      if(d.type==='mcq'&&mcqSelections[q.qi]!==undefined)done++;
+      else if(d.type==='tick'&&tickSelections[q.qi]&&tickSelections[q.qi].length>0)done++;
+      else if((d.type==='input'||d.type==='rewrite')&&document.getElementById('ginp-'+q.qi)?.value.trim())done++;
+    });
+  } else {
+    allQs.forEach(q=>{
+      if(document.getElementById('spinp-'+q.si)?.value.trim())done++;
+    });
+  }
+  const total=20;
+  document.getElementById('answered').textContent=done+' / '+total;
+  document.getElementById('progress').style.width=Math.round(done/total*100)+'%';
+}
+
+/* ══ TIMER ══ */
+let toastTimer=null;
+function showToast(msg,colour,duration=4000){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast'+(colour?' '+colour:'');
+  clearTimeout(toastTimer);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{t.classList.add('show');}));
+  toastTimer=setTimeout(()=>t.classList.remove('show'),duration);
+}
+function dismissWarning(){document.getElementById('time-warning-overlay').classList.remove('show');}
+
+function startTimer(){
+  const totalSecs=seconds;
+  const announcedMinutes=new Set();
+
+  timerInterval=setInterval(()=>{
+    seconds--;
+    const mm=Math.floor(seconds/60),ss=seconds%60;
+    const el2=document.getElementById('timer');
+    el2.textContent=mm+':'+(ss<10?'0':'')+ss;
+
+    // Elapsed minutes: announce every 5 minutes past start
+    const elapsed=Math.floor((totalSecs-seconds)/60);
+    if(elapsed>0&&elapsed%5===0&&ss===0&&!announcedMinutes.has(elapsed)){
+      announcedMinutes.add(elapsed);
+      showToast('⏱ '+elapsed+' minutes past','');
+    }
+
+    // Remaining warnings
+    if(seconds===600&&ss===0)showToast('⚠️ 10 minutes remaining','amber',5000);
+    if(seconds===300&&ss===0)showToast('⚠️ 5 minutes remaining','amber',5000);
+
+    // 2-minute blocking modal
+    if(seconds<=120){
+      el2.classList.add('warning');
+      if(seconds===120){
+        document.getElementById('time-warning-overlay').classList.add('show');
+      }
+    }
+    if(seconds<=0){stopTimer();dismissWarning();markTest();}
+  },1000);
+}
+function stopTimer(){clearInterval(timerInterval);if(currentUtterance)window.speechSynthesis&&window.speechSynthesis.cancel();}
+
+/* ══ MARK ══ */
+function markTest(){
+  stopTimer();
+  let score=0,wrong=[];
+
+  if(selectedTest==='grammar'){
+    allQs.forEach(q=>{
+      const d=q.data,qi=q.qi;
+
+      if(d.type==='mcq'){
+        const given=mcqSelections[qi];
+        const correct=d.answers[0];
+        const ok=given===correct;
+        const opts=document.querySelectorAll(`#gopt-${qi} .g-opt`);
+        opts.forEach(o=>o.style.pointerEvents='none');
+        opts[correct]?.classList.add('correct-reveal');
+        if(ok){score++;opts[given]?.classList.remove('correct-reveal');opts[given]?.classList.add('correct-final');}
+        else{if(given!==undefined)opts[given]?.classList.add('wrong-final');
+          wrong.push({num:q.num,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),correct:d.opts[correct],given:given!==undefined?d.opts[given]:'(blank)'});}
+
+      } else if(d.type==='tick'){
+        const given=(tickSelections[qi]||[]).slice().sort();
+        const correct=d.answers.slice().sort();
+        const ok=JSON.stringify(given)===JSON.stringify(correct);
+        const ticks=document.querySelectorAll(`#gtick-${qi} .g-tick`);
+        ticks.forEach(t=>t.style.pointerEvents='none');
+        correct.forEach(ci=>ticks[ci]?.classList.add('correct-reveal'));
+        given.forEach(gi=>{
+          if(correct.includes(gi))ticks[gi]?.classList.remove('correct-reveal');
+          ticks[gi]?.classList.add(correct.includes(gi)?'correct-final':'wrong-final');
+        });
+        if(ok)score++;
+        else wrong.push({num:q.num,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
+          correct:correct.map(i=>d.opts[i]).join(' & '),given:given.length?given.map(i=>d.opts[i]).join(' & '):'(blank)'});
+
+      } else if(d.type==='input'){
+        const inp=document.getElementById('ginp-'+qi);
+        const given=(inp?.value||'').trim().toLowerCase();
+        const ok=d.answers.map(a=>a.toLowerCase()).includes(given);
+        if(inp){inp.disabled=true;inp.classList.add(ok?'correct':'wrong');}
+        const chk=document.getElementById('gchk-'+qi);
+        if(chk){chk.classList.add('show');chk.textContent=ok?'✓':'✗';chk.style.color=ok?'var(--green)':'var(--red)';}
+        const ans=document.getElementById('gans-'+qi);
+        if(!ok&&ans){ans.classList.add('show');ans.textContent='✓ '+d.displayAnswer;}
+        if(ok)score++;
+        else wrong.push({num:q.num,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
+          correct:d.displayAnswer,given:given||'(blank)'});
+
+      } else if(d.type==='rewrite'){
+        const inp=document.getElementById('ginp-'+qi);
+        const given=(inp?.value||'').trim();
+        // Rewrite questions: mark as attempted — flag for parent review
+        if(inp)inp.disabled=true;
+        if(given){score++;} // give benefit of doubt — parent can review in email
+        else wrong.push({num:q.num,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
+          correct:'(see email — requires review)',given:'(blank)'});
+      }
+    });
+
+  } else {
+    // SPELLING
+    allQs.forEach(q=>{
+      const si=q.si;
+      const inp=document.getElementById('spinp-'+si);
+      const given=(inp?.value||'').trim().toLowerCase().replace(/[^a-z]/g,'');
+      const correct=q.word.toLowerCase();
+      const ok=given===correct;
+      if(inp){inp.disabled=true;inp.classList.add(ok?'correct':'wrong');}
+      const chk=document.getElementById('spchk-'+si);
+      if(chk){chk.classList.add('show');chk.textContent=ok?'✓':'✗';chk.style.color=ok?'var(--green)':'var(--red)';}
+      const wrd=document.getElementById('spword-'+si);
+      if(!ok&&wrd){wrd.classList.add('show');wrd.textContent='✓ '+q.word;}
+      if(ok)score++;
+      else wrong.push({num:q.num,desc:'Spelling: '+currentSpelling[si].sentence.replace('___','___'),
+        correct:q.word,given:(inp?.value||'').trim()||'(blank)'});
+    });
+  }
+
+  showResults(score,wrong);
+}
+
+/* ══ RESULTS ══ */
+function showResults(score,wrong){
+  document.getElementById('test-screen').style.display='none';
+  document.getElementById('results-screen').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('res-score').textContent=score;
+  document.getElementById('res-name').textContent=pupilName+"'s results";
+
+  const pct=score/20;
+  let band,cc,bt;
+  if(pct>=0.85){band='Excellent';cc='band-excellent';bt='Well above expected standard';}
+  else if(pct>=0.65){band='Good';cc='band-good';bt='Meeting expected Year 5 standard';}
+  else if(pct>=0.45){band='Developing';cc='band-developing';bt='Approaching expected standard';}
+  else{band='Needs support';cc='band-support';bt='Below expected standard';}
+
+  document.getElementById('res-band').textContent=bt;
+  const chip=document.getElementById('res-chip');chip.textContent=band;chip.className='band-chip '+cc;
+
+  const dt=document.getElementById('breakdown-title'),wl=document.getElementById('wrong-list');
+  wl.innerHTML='';
+  if(wrong.length===0){dt.textContent='🎉 Perfect score! All 20 correct!';}
+  else{
+    dt.textContent=`Review (${wrong.length} question${wrong.length!==1?'s':''} to practise):`;
+    wrong.forEach(w=>{
+      const li=el('li','wrong-item');
+      li.innerHTML=`<span class="wrong-qnum">Q${w.num}</span><span class="wrong-q">${w.desc}</span>`+
+        `<span class="wrong-correct">✓ ${w.correct}</span>`+
+        `<span class="wrong-given">You answered: ${w.given}</span>`;
+      wl.appendChild(li);
+    });
+  }
+
+  const testLabel=selectedTest==='grammar'?'Grammar & Punctuation':'Spelling';
+  const elapsed=(selectedTest==='grammar'?45:15)*60-seconds;
+  const tt=formatTime(Math.max(0,elapsed));
+  const ws=wrong.length===0?'All correct!':wrong.map(w=>`  Q${w.num}: ${w.desc}  ✓ ${w.correct}  (wrote: ${w.given})`).join('\n');
+  const rewriteNote=selectedTest==='grammar'&&allQs.some(q=>q.data?.type==='rewrite')?
+    '\n\nNote: Any rewrite/correction questions have been awarded a mark if attempted. Please review the child\'s answers for accuracy.\n':'';
+  const body=`Year 5 English Test Results\n====================\nChild: ${pupilName}\nTest: ${testLabel}\nScore: ${score}/20\nBand: ${band} - ${bt}\nTime: ${tt}\nVariant: ${variantCode}${rewriteNote}\n\nTo review:\n${ws}\n====================\n${new Date().toLocaleString('en-GB')}`;
+  sendEmail(score,band,tt,body);
+}
+
+function formatTime(e){const m=Math.floor(e/60),s=e%60;return m+' min '+s+' sec';}
+
+/* ══ EMAIL ══ */
+function sendEmail(score,band,tt,body){
+  const el2=document.getElementById('email-status');
+  el2.className='email-status sending';el2.textContent='📨 Sending results to your parent...';
+  emailjs.send(EJS_SVC,EJS_TPL,{to_email:P_EMAIL,pupil_name:pupilName,score:score+' / 20',band,time_taken:tt,results_body:body,date:new Date().toLocaleString('en-GB')})
+  .then(()=>{el2.className='email-status sent';el2.textContent='✅ Results sent to your parent!';})
+  .catch(e=>{el2.className='email-status failed';el2.textContent='⚠️ Could not send email — show this page to your parent.';console.error(e);});
+}
+
+/* ══ START / RESET ══ */
+function startTest(){
+  const n=document.getElementById('pupil-name').value.trim();
+  if(!n){document.getElementById('pupil-name').focus();return;}
+  if(!selectedTest)return;
+  pupilName=n;
+  document.getElementById('name-screen').style.display='none';
+  document.getElementById('test-screen').style.display='block';
+  document.getElementById('name-display').textContent=pupilName;
+  buildTest();startTimer();
+}
+function confirmReset(){if(confirm('Start again? All answers will be cleared.'))resetAll();}
+function resetAll(){
+  stopTimer();dismissWarning();
+  clearTimeout(toastTimer);document.getElementById('toast').classList.remove('show');
+  seconds=45*60;pupilName='';selectedTest='';
+  document.getElementById('pupil-name').value='';
+  document.getElementById('results-screen').style.display='none';
+  document.getElementById('test-screen').style.display='none';
+  document.getElementById('name-screen').style.display='block';
+  document.getElementById('timer').classList.remove('warning');
+  document.getElementById('speech-warning').classList.remove('show');
+  ['grammar','spelling'].forEach(k=>document.getElementById('tc-'+k).classList.remove('selected'));
+  document.getElementById('btn-start').disabled=true;
+  document.getElementById('btn-start').textContent='Select a test to begin →';
+  document.getElementById('header-title').textContent='Year 5 English Tests';
+  document.getElementById('header-sub').textContent='Based on NFER format';
+  generateTest();window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══ INIT ══ */
+generateTest();
+</script>
+</body>
+</html>
