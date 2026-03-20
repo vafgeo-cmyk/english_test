@@ -1037,6 +1037,14 @@ function markTest(){
   let score=0,wrong=[];
 
   if(selectedTest==='grammar'){
+    // Build section breakdown tracker from the selected questions
+    const sb={};
+    allQs.forEach(q=>{
+      const sec=q.data.section;
+      if(!sb[sec])sb[sec]={c:0,t:0};
+      sb[sec].t++;
+    });
+
     allQs.forEach(q=>{
       const d=q.data,qi=q.qi;
 
@@ -1047,9 +1055,9 @@ function markTest(){
         const opts=document.querySelectorAll(`#gopt-${qi} .g-opt`);
         opts.forEach(o=>o.style.pointerEvents='none');
         opts[correct]?.classList.add('correct-reveal');
-        if(ok){score++;opts[given]?.classList.remove('correct-reveal');opts[given]?.classList.add('correct-final');}
+        if(ok){score++;sb[d.section].c++;opts[given]?.classList.remove('correct-reveal');opts[given]?.classList.add('correct-final');}
         else{if(given!==undefined)opts[given]?.classList.add('wrong-final');
-          wrong.push({num:q.num,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),correct:d.opts[correct],given:given!==undefined?d.opts[given]:'(blank)'});}
+          wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),correct:d.opts[correct],given:given!==undefined?d.opts[given]:'(blank)'});}
 
       } else if(d.type==='tick'){
         const given=(tickSelections[qi]||[]).slice().sort();
@@ -1062,8 +1070,8 @@ function markTest(){
           if(correct.includes(gi))ticks[gi]?.classList.remove('correct-reveal');
           ticks[gi]?.classList.add(correct.includes(gi)?'correct-final':'wrong-final');
         });
-        if(ok)score++;
-        else wrong.push({num:q.num,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
+        if(ok){score++;sb[d.section].c++;}
+        else wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
           correct:correct.map(i=>d.opts[i]).join(' & '),given:given.length?given.map(i=>d.opts[i]).join(' & '):'(blank)'});
 
       } else if(d.type==='input'){
@@ -1075,25 +1083,26 @@ function markTest(){
         if(chk){chk.classList.add('show');chk.textContent=ok?'✓':'✗';chk.style.color=ok?'var(--green)':'var(--red)';}
         const ans=document.getElementById('gans-'+qi);
         if(!ok&&ans){ans.classList.add('show');ans.textContent='✓ '+d.displayAnswer;}
-        if(ok)score++;
-        else wrong.push({num:q.num,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
+        if(ok){score++;sb[d.section].c++;}
+        else wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
           correct:d.displayAnswer,given:given||'(blank)'});
 
       } else if(d.type==='rewrite'){
         const inp=document.getElementById('ginp-'+qi);
         const given=(inp?.value||'').trim();
-        // Rewrite questions: mark as attempted — flag for parent review
         if(inp)inp.disabled=true;
-        if(given){score++;} // give benefit of doubt — parent can review in email
-        else wrong.push({num:q.num,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
+        if(given){score++;sb[d.section].c++;}
+        else wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
           correct:'(see email — requires review)',given:'(blank)'});
       }
     });
 
   } else {
-    // SPELLING
+    // SPELLING — track correct/wrong
+    const sb={'Spelling':{c:0,t:0}};
     allQs.forEach(q=>{
       const si=q.si;
+      sb['Spelling'].t++;
       const inp=document.getElementById('spinp-'+si);
       const given=(inp?.value||'').trim().toLowerCase().replace(/[^a-z]/g,'');
       const correct=q.word.toLowerCase();
@@ -1103,17 +1112,19 @@ function markTest(){
       if(chk){chk.classList.add('show');chk.textContent=ok?'✓':'✗';chk.style.color=ok?'var(--green)':'var(--red)';}
       const wrd=document.getElementById('spword-'+si);
       if(!ok&&wrd){wrd.classList.add('show');wrd.textContent='✓ '+q.word;}
-      if(ok)score++;
-      else wrong.push({num:q.num,desc:'Spelling: '+currentSpelling[si].sentence.replace('___','___'),
+      if(ok){score++;sb['Spelling'].c++;}
+      else wrong.push({num:q.num,section:'Spelling',desc:currentSpelling[si].sentence.replace('___','________'),
         correct:q.word,given:(inp?.value||'').trim()||'(blank)'});
     });
+    showResults(score,wrong,sb);
+    return;
   }
 
-  showResults(score,wrong);
+  showResults(score,wrong,sb);
 }
 
 /* ══ RESULTS ══ */
-function showResults(score,wrong){
+function showResults(score,wrong,sb){
   document.getElementById('test-screen').style.display='none';
   document.getElementById('results-screen').style.display='block';
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1147,10 +1158,17 @@ function showResults(score,wrong){
   const testLabel=selectedTest==='grammar'?'Grammar & Punctuation':'Spelling';
   const elapsed=(selectedTest==='grammar'?45:15)*60-seconds;
   const tt=formatTime(Math.max(0,elapsed));
-  const ws=wrong.length===0?'All correct!':wrong.map(w=>`  Q${w.num}: ${w.desc}  ✓ ${w.correct}  (wrote: ${w.given})`).join('\n');
-  const rewriteNote=selectedTest==='grammar'&&allQs.some(q=>q.data?.type==='rewrite')?
-    '\n\nNote: Any rewrite/correction questions have been awarded a mark if attempted. Please review the child\'s answers for accuracy.\n':'';
-  const body=`Year 5 English Test Results\n====================\nChild: ${pupilName}\nTest: ${testLabel}\nScore: ${score}/20\nBand: ${band} - ${bt}\nTime: ${tt}\nVariant: ${variantCode}${rewriteNote}\n\nTo review:\n${ws}\n====================\n${new Date().toLocaleString('en-GB')}`;
+
+  // Build section breakdown string
+  let ss='';
+  Object.entries(sb).forEach(([sec,d])=>{
+    const pct=d.t>0?Math.round(d.c/d.t*100):0;
+    const bar='█'.repeat(Math.round(pct/10))+'░'.repeat(10-Math.round(pct/10));
+    ss+=`  ${sec}: ${d.c}/${d.t} (${pct}%)  ${bar}\n`;
+  });
+
+  const ws=wrong.length===0?'All correct!':wrong.map(w=>`  Q${w.num} [${w.section}]: ${w.desc}\n    ✓ ${w.correct}  (wrote: ${w.given})`).join('\n');
+  const body=`Year 5 English Test Results\n====================\nChild: ${pupilName}\nTest: ${testLabel}\nScore: ${score}/20\nBand: ${band} - ${bt}\nTime: ${tt}\nVariant: ${variantCode}\n\nSection breakdown:\n${ss}\nTo review:\n${ws}\n====================\n${new Date().toLocaleString('en-GB')}`;
   sendEmail(score,band,tt,body,testLabel);
 }
 
