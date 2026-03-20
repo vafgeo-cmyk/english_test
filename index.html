@@ -1151,16 +1151,16 @@ function showResults(score,wrong){
   const rewriteNote=selectedTest==='grammar'&&allQs.some(q=>q.data?.type==='rewrite')?
     '\n\nNote: Any rewrite/correction questions have been awarded a mark if attempted. Please review the child\'s answers for accuracy.\n':'';
   const body=`Year 5 English Test Results\n====================\nChild: ${pupilName}\nTest: ${testLabel}\nScore: ${score}/20\nBand: ${band} - ${bt}\nTime: ${tt}\nVariant: ${variantCode}${rewriteNote}\n\nTo review:\n${ws}\n====================\n${new Date().toLocaleString('en-GB')}`;
-  sendEmail(score,band,tt,body);
+  sendEmail(score,band,tt,body,testLabel);
 }
 
 function formatTime(e){const m=Math.floor(e/60),s=e%60;return m+' min '+s+' sec';}
 
 /* ══ EMAIL ══ */
-function sendEmail(score,band,tt,body){
+function sendEmail(score,band,tt,body,testName){
   const el2=document.getElementById('email-status');
   el2.className='email-status sending';el2.textContent='📨 Sending results to your parent...';
-  emailjs.send(EJS_SVC,EJS_TPL,{to_email:P_EMAIL,pupil_name:pupilName,score:score+' / 20',band,time_taken:tt,results_body:body,date:new Date().toLocaleString('en-GB')})
+  emailjs.send(EJS_SVC,EJS_TPL,{to_email:P_EMAIL,pupil_name:pupilName,score:score+' / 20',band,time_taken:tt,results_body:body,date:new Date().toLocaleString('en-GB'),test_name:testName,subject:'Year 5 English'})
   .then(()=>{el2.className='email-status sent';el2.textContent='✅ Results sent to your parent!';})
   .catch(e=>{el2.className='email-status failed';el2.textContent='⚠️ Could not send email — show this page to your parent.';console.error(e);});
 }
