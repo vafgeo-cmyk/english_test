@@ -1097,6 +1097,9 @@ function markTest(){
       }
     });
 
+    showResults(score,wrong,sb);
+    return;
+
   } else {
     // SPELLING — track correct/wrong
     const sb={'Spelling':{c:0,t:0}};
@@ -1119,8 +1122,6 @@ function markTest(){
     showResults(score,wrong,sb);
     return;
   }
-
-  showResults(score,wrong,sb);
 }
 
 /* ══ RESULTS ══ */
@@ -1178,7 +1179,7 @@ function formatTime(e){const m=Math.floor(e/60),s=e%60;return m+' min '+s+' sec'
 function sendEmail(score,band,tt,body,testName){
   const el2=document.getElementById('email-status');
   el2.className='email-status sending';el2.textContent='📨 Sending results to your parent...';
-  emailjs.send(EJS_SVC,EJS_TPL,{to_email:P_EMAIL,pupil_name:pupilName,score:score+' / 20',band,time_taken:tt,results_body:body,date:new Date().toLocaleString('en-GB'),test_name:testName,subject:'Year 5 English'})
+  emailjs.send(EJS_SVC,EJS_TPL,{to_email:P_EMAIL,pupil_name:pupilName,score:score+' out of 20',band,time_taken:tt,results_body:body,date:new Date().toLocaleString('en-GB'),test_name:testName,subject:'Year 5 English'})
   .then(()=>{el2.className='email-status sent';el2.textContent='✅ Results sent to your parent!';})
   .catch(e=>{el2.className='email-status failed';el2.textContent='⚠️ Could not send email — show this page to your parent.';console.error(e);});
 }
