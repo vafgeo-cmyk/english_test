@@ -176,7 +176,8 @@ body{font-family:'Nunito Sans',sans-serif;background:var(--bg);color:var(--text)
 .email-status.failed{background:var(--red-bg);color:var(--red);display:block}
 .breakdown-title{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;color:var(--navy);margin:1.5rem 0 .75rem;text-align:left}
 .wrong-list{list-style:none}
-.wrong-item{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:8px;padding:.6rem 1rem;margin-bottom:6px;font-size:.9rem;display:flex;gap:.5rem;align-items:flex-start;flex-wrap:wrap}
+.wrong-item{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:8px;padding:.75rem 1rem;margin-bottom:8px;font-size:.9rem;display:flex;flex-direction:column;gap:.35rem}
+.wrong-item-header{display:flex;gap:.5rem;align-items:baseline;flex-wrap:wrap}
 .wrong-qnum{color:var(--muted);font-size:.8rem;min-width:28px;padding-top:2px}
 .wrong-q{flex:1;font-weight:600}
 .wrong-correct{color:var(--green);font-weight:700}
@@ -1057,7 +1058,7 @@ function markTest(){
         opts[correct]?.classList.add('correct-reveal');
         if(ok){score++;sb[d.section].c++;opts[given]?.classList.remove('correct-reveal');opts[given]?.classList.add('correct-final');}
         else{if(given!==undefined)opts[given]?.classList.add('wrong-final');
-          wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),correct:d.opts[correct],given:given!==undefined?d.opts[given]:'(blank)'});}
+          wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim(),correct:d.opts[correct],given:given!==undefined?d.opts[given]:'(blank)'});}
 
       } else if(d.type==='tick'){
         const given=(tickSelections[qi]||[]).slice().sort();
@@ -1071,7 +1072,7 @@ function markTest(){
           ticks[gi]?.classList.add(correct.includes(gi)?'correct-final':'wrong-final');
         });
         if(ok){score++;sb[d.section].c++;}
-        else wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
+        else wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim(),
           correct:correct.map(i=>d.opts[i]).join(' & '),given:given.length?given.map(i=>d.opts[i]).join(' & '):'(blank)'});
 
       } else if(d.type==='input'){
@@ -1084,7 +1085,7 @@ function markTest(){
         const ans=document.getElementById('gans-'+qi);
         if(!ok&&ans){ans.classList.add('show');ans.textContent='✓ '+d.displayAnswer;}
         if(ok){score++;sb[d.section].c++;}
-        else wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
+        else wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim(),
           correct:d.displayAnswer,given:given||'(blank)'});
 
       } else if(d.type==='rewrite'){
@@ -1092,7 +1093,7 @@ function markTest(){
         const given=(inp?.value||'').trim();
         if(inp)inp.disabled=true;
         if(given){score++;sb[d.section].c++;}
-        else wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim().substring(0,60),
+        else wrong.push({num:q.num,section:d.section,desc:d.question.replace(/<[^>]+>/g,'').trim(),
           correct:'(see email — requires review)',given:'(blank)'});
       }
     });
@@ -1149,9 +1150,8 @@ function showResults(score,wrong,sb){
     dt.textContent=`Review (${wrong.length} question${wrong.length!==1?'s':''} to practise):`;
     wrong.forEach(w=>{
       const li=el('li','wrong-item');
-      li.innerHTML=`<span class="wrong-qnum">Q${w.num}</span><span class="wrong-q">${w.desc}</span>`+
-        `<span class="wrong-correct">✓ ${w.correct}</span>`+
-        `<span class="wrong-given">You answered: ${w.given}</span>`;
+      li.innerHTML=`<div class="wrong-item-header"><span class="wrong-qnum">Q${w.num}</span><span class="wrong-q">${w.desc}</span></div>`+
+        `<div><span class="wrong-correct">✓ ${w.correct}</span> <span class="wrong-given">(you wrote: ${w.given})</span></div>`;
       wl.appendChild(li);
     });
   }
